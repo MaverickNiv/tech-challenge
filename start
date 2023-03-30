@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Doc for Team City First Start
+# https://www.jetbrains.com/help/teamcity/quick-setup-guide.html#TeamCity+First+Start
+
+export TC_SERVER_HOST=<your-docker-hostname>
+export TC_SERVER_HOST_IP=<your-docker-host-ip>
+export TC_SERVER_PORT=8111
+
+main() {
+  start_server
+  start_agent
+}
+
+#########################
+start_server() {
+  echo "Starting Team City server..."
+  docker pull jetbrains/teamcity-server
+  docker run -it -d 						\
+	--name tc_server 					\
+	-u root 						\
+	-v /teamcity/data:/data/teamcity_server/datadir 	\
+	-v /teamcity/logs:/opt/teamcity/logs			\
+	-p $TC_SERVER_PORT:8111					\
+	jetbrains/teamcity-server
+  sleep 10
+  open http://$TC_SERVER_HOST:8111
+  sleep 60
+}
+
+#########################
+# Doc for agent
+# https://github.com/JetBrains/teamcity-docker-images#agent-jetbrainsteamcity-agent
+start_agent() {
+  docker pull jetbrains/teamcity-agent
+  docker run -d							\
+	--name tc_agent						\
+	--add-host "$TC_SERVER_HOST:$TC_SERVER_HOST_IP"		\
+	-e SERVER_URL=http://$TC_SERVER_HOST:$TC_SERVER_PORT	\
+	jetbrains/teamcity-agent
+}
+
+main "$@"

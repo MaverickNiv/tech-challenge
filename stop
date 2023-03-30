@@ -1,0 +1,6 @@
+#!/bin/bash
+
+eval $(minikube docker-env)
+
+docker stop tc_server && docker rm tc_server
+docker stop tc_agent&& docker rm tc_agent
