@@ -1,5 +1,0 @@
----
-- !policy
-  id: teamcity
-  body:
-  - !host conjur-test
