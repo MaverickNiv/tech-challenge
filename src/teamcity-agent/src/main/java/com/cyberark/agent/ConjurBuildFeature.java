@@ -79,6 +79,7 @@ public class ConjurBuildFeature extends AgentLifeCycleAdapter {
                     BuildProblemData.createBuildProblem(
                             "ConjurConnection", "ConjurConnection", message));
             runningBuild.stopBuild(message);
+            ConjurConfig config = null;
         }
 
         Map<String, String> buildParams = runningBuild.getSharedBuildParameters().getAllParameters();
